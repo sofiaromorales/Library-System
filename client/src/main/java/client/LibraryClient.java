@@ -34,10 +34,10 @@ public class LibraryClient {
                 );
                 switch (choice) {
                     case 0: {
-                        String name = JOptionPane.showInputDialog("Thipe the name of the book to find");
+                        String name = JOptionPane.showInputDialog("Type the name of the book to find");
                         try {
                            Book response = server.findBook(new Book(name));
-                           JOptionPane.showMessageDialog(null, "Title : " + response.getTitle() + "\n"); 
+                           JOptionPane.showMessageDialog(null, "Title : " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
                         } catch(NoSuchElementException ex) {
                             JOptionPane.showMessageDialog(null, "Not found");
                         }

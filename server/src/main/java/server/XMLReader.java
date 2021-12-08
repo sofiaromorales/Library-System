@@ -4,6 +4,7 @@
  */
 package server;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +26,19 @@ import shared.Book;
  */
 public class XMLReader {
     
-    public static void main(String[] args) {
+    List<Book> bookList = new ArrayList<Book>();
+    
+    public void readLibraryXML() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {    
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse("libraryA.xml");
+            Document doc = builder.parse(new File("src/main/java/server/libraryA.xml"));
+            doc.getDocumentElement().normalize();
+            Element root = doc.getDocumentElement();
             NodeList nodeList = doc.getElementsByTagName("book");
-            List<Book> bookList = new ArrayList<Book>();
+            System.out.println("==============SERVER BOOKS==============");
             for (int i = 0; i < nodeList.getLength(); i++) {
+                System.out.println("");
                 bookList.add(getBook(nodeList.item(i)));
             }
         } catch (ParserConfigurationException ex) {
@@ -45,6 +51,11 @@ public class XMLReader {
         }
     }
     
+    public static void main(String[] args) {
+        XMLReader XMLBookReader = new XMLReader();
+        XMLBookReader.readLibraryXML();
+    }
+    
     private static Book getBook(Node node) {
         if (node.getNodeType() == node.ELEMENT_NODE) {
            Element element = (Element) node;
@@ -52,6 +63,7 @@ public class XMLReader {
                 getTagValue("libro", element), 
                 getTagValue("autor", element)
            );
+           System.out.println(book.toString());
            return book;
         }
         return new Book();
@@ -61,6 +73,11 @@ public class XMLReader {
         NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
         Node node = (Node) nodeList.item(0);
         return node.getNodeValue();
+    }
+    
+    public List<Book> getBookList() {
+        readLibraryXML();
+        return bookList;
     }
     
     

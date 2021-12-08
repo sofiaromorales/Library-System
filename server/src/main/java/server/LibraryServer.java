@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 import shared.LibraryRMIInterface;
 import shared.Book;
@@ -18,9 +19,17 @@ import shared.Book;
  */
 public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInterface {
     
+    XMLReader XMLBookReader = new XMLReader();
+    
     @Override
     public Book findBook(Book b) throws RemoteException {
-        Book response = new Book("Hello");
+        List<Book> libraryBooks = XMLBookReader.getBookList();
+        Book response = new Book("");
+        for (int i = 0; i < libraryBooks.size(); i++) {
+            if (libraryBooks.get(i).getTitle().equals(b.getTitle())) {
+                return libraryBooks.get(i);
+            }
+        }
         return response;
     }
     
@@ -33,7 +42,7 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
              Registry reg = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
              LibraryServer library = new LibraryServer();
              reg.rebind("rmi://localhost/service", library);
-             System.out.println("Serever running...");
+             System.out.println("Server running...");
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
