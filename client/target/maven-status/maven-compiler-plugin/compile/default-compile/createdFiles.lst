@@ -1,0 +1,3 @@
+client/Book.class
+client/LibraryClient.class
+client/LibraryRMIInterface.class
