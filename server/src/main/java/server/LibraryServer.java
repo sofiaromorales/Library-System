@@ -43,7 +43,7 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
              LibraryServer library = new LibraryServer();
              SocketConnection socketConnection = new SocketConnection();
              socketConnection.createSocket();
-             reg.rebind("rmi://localhost/service", library);
+             reg.rebind("rmi://10.0.1.54/service", library);
              System.out.println("Server running...");
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
