@@ -13,7 +13,9 @@ import java.net.Socket;
  * @author sofiarodriguezmorales
  */
 public class SocketConnection {
-    public static void main(String[] args)  {
+    
+    public void createSocket() {
+        System.out.println("Creating socket conenction...");
         try {
             ServerSocket ss = new ServerSocket(666);
             Socket s = ss.accept();
@@ -24,5 +26,9 @@ public class SocketConnection {
         } catch(Exception e) {
             System.out.println(e);
         }
+    }
+    
+    public static void main(String[] args)  {
+        
     }
 }

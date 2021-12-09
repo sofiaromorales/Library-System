@@ -4,6 +4,8 @@
  */
 package client;
 
+import java.io.DataOutputStream;
+import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -55,12 +57,27 @@ public class LibraryClient {
                         System.out.println(yField.getText());
                         System.out.println(yField.getText().isEmpty());
                         //String name = JOptionPane.showInputDialog("Type the name of the book to find");
-                        try {
-                           Book response = server.findBook(new Book(xField.getText()));
-                           JOptionPane.showMessageDialog(null, "Title : " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
-                        } catch(NoSuchElementException ex) {
-                            JOptionPane.showMessageDialog(null, "Not found");
+                        if (yField.getText().isEmpty()) {
+                           try {
+                                Book response = server.findBook(new Book(xField.getText()));
+                                JOptionPane.showMessageDialog(null, "Title : " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
+                            } catch(NoSuchElementException ex) {
+                                JOptionPane.showMessageDialog(null, "Not found");
+                            } 
+                        } else {
+                            try {
+                               Socket socket = new Socket("10.0.1.54", 6666); 
+                               DataOutputStream dataStream = new DataOutputStream(socket.getOutputStream());
+                               dataStream.writeUTF(xField.getText());
+                               dataStream.flush();
+                               dataStream.close();
+                               socket.close();
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
+
                         }
+                        
                         
                         break;
                     }
