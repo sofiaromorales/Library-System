@@ -4,7 +4,14 @@
  */
 package client;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import static java.lang.System.in;
+import static java.lang.System.out;
 import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -25,10 +32,12 @@ import shared.Book;
  * @author sofiarodriguezmorales
  */
 public class LibraryClient {
+    
     public static void main(String[] args) {
+        Constants constants = new Constants();
         try {
-            Registry reg = LocateRegistry.getRegistry("10.0.1.54", 1099);
-            LibraryRMIInterface server = (LibraryRMIInterface) reg.lookup("rmi://10.0.1.54/service");
+            Registry reg = LocateRegistry.getRegistry(constants.SERVER_IP, constants.SERVER_PORT);
+            LibraryRMIInterface server = (LibraryRMIInterface) reg.lookup("rmi://localhost/service");
             
             boolean findMore;
             do {
@@ -54,44 +63,47 @@ public class LibraryClient {
                                 "", 
                                 JOptionPane.OK_CANCEL_OPTION
                         );
-                        System.out.println(yField.getText());
-                        System.out.println(yField.getText().isEmpty());
                         //String name = JOptionPane.showInputDialog("Type the name of the book to find");
                         if (yField.getText().isEmpty()) {
                            try {
                                 Book response = server.findBook(new Book(xField.getText()));
-                                JOptionPane.showMessageDialog(null, "Title : " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
+                                JOptionPane.showMessageDialog(null, "Title: " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
                             } catch(NoSuchElementException ex) {
                                 JOptionPane.showMessageDialog(null, "Not found");
                             } 
+                        } else if (yField.getText().equals(constants.REMOTE_LIBRARY)) {
+                            try{      
+                                Socket s = new Socket(constants.SOCKET_REMOTE_LIBRARY_IP, constants.SOCKET_REMOTE_LIBRARY_PORT);  
+                                DataInputStream din = new DataInputStream(s.getInputStream());  
+                                DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+                                dout.writeUTF(xField.getText() + " " + constants.LIBRARY);  
+                                dout.flush(); 
+                                String[] bookInfo = din.readUTF().split(" ");
+                                Book response = new Book(bookInfo[0], bookInfo[1]);
+                                JOptionPane.showMessageDialog(null, "Title: " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
+                                dout.close();  
+                                s.close();  
+                            } catch(Exception e){ System.out.println(e); }  
                         } else {
-                            try {
-                               Socket socket = new Socket("10.0.1.54", 6666); 
-                               DataOutputStream dataStream = new DataOutputStream(socket.getOutputStream());
-                               dataStream.writeUTF(xField.getText());
-                               dataStream.flush();
-                               dataStream.close();
-                               socket.close();
-                            } catch (Exception e) {
-                                System.out.println(e);
-                            }
-
+                            JOptionPane.showMessageDialog(null, "Library doesn't exists"); 
                         }
-                        
-                        
                         break;
                     }
                     default: 
                        System.exit(0);
                        break;
                 }
-                findMore = (JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Exit",
-                        JOptionPane.YES_NO_OPTION
-                        ) == JOptionPane.NO_OPTION);
+                findMore = false;
+//                findMore = (JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Exit",
+//                        JOptionPane.YES_NO_OPTION
+//                        ) == JOptionPane.NO_OPTION);
             } while (findMore);
                     
         } catch (RemoteException | NotBoundException e) {
             System.out.println(e.getMessage());
         }
+        
     }
+    
+
 }

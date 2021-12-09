@@ -1,2 +1,5 @@
-/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/XMLReader.java
+/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/SocketConnection.java
+/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/EchoThread.java
+/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/monitor.java
+/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/NonBlockingSocket.java
 /Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/LibraryServer.java

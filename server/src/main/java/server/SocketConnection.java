@@ -5,27 +5,39 @@
 package server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import shared.Book;
 
 /**
  *
  * @author sofiarodriguezmorales
  */
 public class SocketConnection {
+
     
-    public void createSocket() {
-        System.out.println("Creating socket conenction...");
-        try {
-            ServerSocket ss = new ServerSocket(666);
+    
+
+    
+    public void createSocket() throws RemoteException {
+        LibraryServer libraryServer = new LibraryServer();
+        Constants constants = new Constants();
+        try {  
+            ServerSocket ss = new ServerSocket(constants.SOCKET_REMOTE_LIBRARY_PORT);  
             Socket s = ss.accept();
             DataInputStream dis = new DataInputStream(s.getInputStream());
-            String message = (String) dis.readUTF();
-            System.out.println("Client says = " + message);
-            ss.close();
-        } catch(Exception e) {
-            System.out.println(e);
-        }
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            String[] response = dis.readUTF().split(" ");
+            String bookName = response[0] ;
+            System.out.println("Looking for = " + bookName); 
+            Book book = new Book(bookName);
+            Book returnedBook = libraryServer.findBook(book);
+            dout.writeUTF(returnedBook.getTitle() + " " + returnedBook.getAuthor());
+            dout.flush();
+            ss.close();  
+        } catch(Exception e) { System.out.println(e); }    
     }
     
     public static void main(String[] args)  {

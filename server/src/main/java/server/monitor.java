@@ -32,7 +32,7 @@ public class monitor {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {    
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new File("src/main/java/server/libraryA.xml"));
+            Document doc = builder.parse(new File("src/main/java/server/library.xml"));
             doc.getDocumentElement().normalize();
             Element root = doc.getDocumentElement();
             NodeList nodeList = doc.getElementsByTagName("book");

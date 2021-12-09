@@ -4,6 +4,7 @@
  */
 package server;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -37,14 +38,15 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
         super();
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Constants constants = new Constants();
         try {
              Registry reg = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
              LibraryServer library = new LibraryServer();
+             reg.rebind("rmi://" + constants.CLIENT_IP + "/service", library);
+             System.out.println("Server running...");
              SocketConnection socketConnection = new SocketConnection();
              socketConnection.createSocket();
-             reg.rebind("rmi://10.0.1.54/service", library);
-             System.out.println("Server running...");
         } catch (RemoteException ex) {
             System.out.println(ex.getMessage());
         }
