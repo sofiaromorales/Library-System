@@ -12,4 +12,5 @@ public class Constants {
     public static final String LIBRARY_SERVER = "";
     public static final String CLIENT_IP = "localhost";
     public static final Integer SOCKET_REMOTE_LIBRARY_PORT = 6666;
+    public static final String LOG_FILE_PATH = "/Users/sofiarodriguezmorales/Desktop/SD/Library_System/server/src/main/java/server/log.txt";
 }

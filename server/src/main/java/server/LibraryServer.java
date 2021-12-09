@@ -27,6 +27,7 @@ import shared.Book;
 public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInterface {
     
     monitor XMLBookReader = new monitor();
+    Constants constants = new Constants();
     
     @Override
     public Book findBook(Book b) throws RemoteException {
@@ -47,7 +48,7 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
     
     public void registryLog(String message, String origin){
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter("C:\\Users\\LosSanchez\\Documents\\GitHub\\Library-System\\server\\src\\main\\java\\server\\log.txt", true));
+            PrintWriter writer = new PrintWriter(new FileWriter(constants.LOG_FILE_PATH, true));
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             writer.append(dtf.format(LocalDateTime.now())+" "+message +" "+ "From: " + origin+"\n");
             writer.close();
