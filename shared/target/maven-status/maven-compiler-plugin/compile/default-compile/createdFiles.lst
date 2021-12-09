@@ -1,2 +1,2 @@
-shared/LibraryRMIInterface.class
-shared/Book.class
+shared\Book.class
+shared\LibraryRMIInterface.class

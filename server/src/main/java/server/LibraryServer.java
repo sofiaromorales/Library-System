@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 import shared.LibraryRMIInterface;
@@ -37,7 +38,21 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
     public LibraryServer() throws RemoteException {
         super();
     }
-    
+    @Override
+    public ArrayList<Book> findBookByAuthor(Book b) throws RemoteException {
+        List<Book> libraryBooks = XMLBookReader.getBookList();
+        ArrayList<Book> booksList = new ArrayList<Book>();
+        System.out.println(libraryBooks.toString());
+        for (int i = 0; i < libraryBooks.size(); i++) {
+            if (libraryBooks.get(i).getAuthor().equals(b.getAuthor())) {
+                booksList.add(libraryBooks.get(i));
+            }
+        }
+        System.out.println(booksList.toString());
+        return booksList;
+        
+        
+    }
     public static void main(String[] args) throws IOException {
         Constants constants = new Constants();
         try {
