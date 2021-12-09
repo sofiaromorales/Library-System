@@ -5,5 +5,17 @@
 			<libro>LibroA</libro>
 			<autor>AutorA</autor>
 		</book>
+                <book>
+			<libro>LibroB</libro>
+			<autor>AutorA</autor>
+		</book>
+                <book>
+			<libro>LibroC</libro>
+			<autor>AutorB</autor>
+		</book>
+                <book>
+			<libro>LibroD</libro>
+			<autor>AutorB</autor>
+		</book>
 	</bibliotecaA>
 </bibliotecas>

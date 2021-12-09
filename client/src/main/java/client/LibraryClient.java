@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
 
@@ -26,7 +27,7 @@ public class LibraryClient {
             
             boolean findMore;
             do {
-                String[] options = {"Find a book", "Exit"};
+                String[] options = {"Find a book by title","Find a book by Author", "Exit"};
                 int choice = JOptionPane.showOptionDialog(null, "Choose an action", "Option dialog",
                         JOptionPane.DEFAULT_OPTION,
                         JOptionPane.INFORMATION_MESSAGE,
@@ -43,6 +44,21 @@ public class LibraryClient {
                         }
                         
                         break;
+                    }
+                    case 1:{
+                        String author = JOptionPane.showInputDialog("Type the name of the author");
+                        String aux = "";
+                        try{
+                            ArrayList<Book> response = server.findBookByAuthor(new Book("",author));
+                            for (int i=0;i < response.size();i++){
+                                
+                                aux = aux + "Title : "+ response.get(i).getTitle()+ "\n"+ "Author: "+ response.get(i).getAuthor()+ "\n\n";
+                               
+                            }
+                            JOptionPane.showMessageDialog(null,aux);
+                        }catch(NoSuchElementException ex){
+                            JOptionPane.showMessageDialog(null, "Not found");
+                        }
                     }
                     default: 
                        System.exit(0);
