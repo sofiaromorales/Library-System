@@ -8,10 +8,15 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import shared.LibraryRMIInterface;
 import shared.Book;
 
@@ -29,15 +34,28 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
         Book response = new Book("");
         for (int i = 0; i < libraryBooks.size(); i++) {
             if (libraryBooks.get(i).getTitle().equals(b.getTitle())) {
-                return libraryBooks.get(i);
+                response = libraryBooks.get(i);
             }
         }
+        this.registryLog("Get Book: "+ b.getTitle(), "My own client");
         return response;
     }
     
     public LibraryServer() throws RemoteException {
         super();
     }
+    
+    public void registryLog(String message, String origin){
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter("C:\\Users\\LosSanchez\\Documents\\GitHub\\Library-System\\server\\src\\main\\java\\server\\log.txt", true));
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            writer.append(dtf.format(LocalDateTime.now())+" "+message +" "+ "From: " + origin+"\n");
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     @Override
     public ArrayList<Book> findBookByAuthor(Book b) throws RemoteException {
         List<Book> libraryBooks = XMLBookReader.getBookList();
@@ -48,7 +66,7 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
                 booksList.add(libraryBooks.get(i));
             }
         }
-        System.out.println(booksList.toString());
+        this.registryLog("Get Author: "+ b.getAuthor(), "My own client");
         return booksList;
         
         

@@ -16,11 +16,6 @@ import shared.Book;
  * @author sofiarodriguezmorales
  */
 public class SocketConnection {
-
-    
-    
-
-    
     public void createSocket() throws RemoteException {
         LibraryServer libraryServer = new LibraryServer();
         Constants constants = new Constants();
@@ -33,6 +28,7 @@ public class SocketConnection {
             String bookName = response[0] ;
             System.out.println("Looking for = " + bookName); 
             Book book = new Book(bookName);
+            libraryServer.registryLog("Get Book: "+ bookName, response[1]);
             Book returnedBook = libraryServer.findBook(book);
             dout.writeUTF(returnedBook.getTitle() + " " + returnedBook.getAuthor());
             dout.flush();
