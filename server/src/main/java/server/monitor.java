@@ -24,7 +24,7 @@ import shared.Book;
  *
  * @author sofiarodriguezmorales
  */
-public class XMLReader {
+public class monitor {
     
     List<Book> bookList = new ArrayList<Book>();
     
@@ -45,14 +45,14 @@ public class XMLReader {
             ex.printStackTrace();
             //Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(monitor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(XMLReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(monitor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public static void main(String[] args) {
-        XMLReader XMLBookReader = new XMLReader();
+        monitor XMLBookReader = new monitor();
         XMLBookReader.readLibraryXML();
     }
     
@@ -75,7 +75,7 @@ public class XMLReader {
         return node.getNodeValue();
     }
     
-    public List<Book> getBookList() {
+    public synchronized List<Book> getBookList() {
         readLibraryXML();
         return bookList;
     }

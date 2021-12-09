@@ -19,7 +19,7 @@ import shared.Book;
  */
 public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInterface {
     
-    XMLReader XMLBookReader = new XMLReader();
+    monitor XMLBookReader = new monitor();
     
     @Override
     public Book findBook(Book b) throws RemoteException {
