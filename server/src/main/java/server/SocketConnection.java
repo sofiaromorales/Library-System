@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import shared.Book;
 
 /**
@@ -16,6 +17,9 @@ import shared.Book;
  * @author sofiarodriguezmorales
  */
 public class SocketConnection {
+    
+        monitor XMLBookReader = new monitor();
+
     public void createSocket() throws RemoteException {
         LibraryServer libraryServer = new LibraryServer();
         Constants constants = new Constants();
@@ -25,12 +29,23 @@ public class SocketConnection {
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             String[] response = dis.readUTF().split(" ");
-            String bookName = response[0] ;
-            System.out.println("Looking for = " + bookName); 
-            Book book = new Book(bookName);
-            libraryServer.registryLog("Get Book: "+ bookName, response[1]);
-            Book returnedBook = libraryServer.findBook(book);
-            dout.writeUTF(returnedBook.getTitle() + " " + returnedBook.getAuthor());
+            Book returnedBook = new Book();
+            if(response[1]=="Get Title:"){
+                String bookName = response[1] ;
+                System.out.println("Looking for = " + bookName); 
+                Book book = new Book(bookName);
+                XMLBookReader.registryLog("Get Book: "+ bookName, response[2]);
+                returnedBook = XMLBookReader.findBook(book);
+            }else{
+                String authorName = response[1] ;
+                System.out.println("Looking for = " + authorName); 
+                Book book = new Book("",authorName);
+                XMLBookReader.registryLog("Get Book: "+ authorName, response[2]);
+                ArrayList<Book> booksList = XMLBookReader.findBookByAuthor(book);
+                returnedBook = booksList.get(0);
+            }
+
+            dout.writeUTF("Title "+ returnedBook.getTitle() + " Author " + returnedBook.getAuthor());
             dout.flush();
             ss.close();  
         } catch(Exception e) { System.out.println(e); }    

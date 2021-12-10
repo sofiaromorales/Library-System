@@ -1,1 +1,12 @@
 2021/12/09 19:23:40 Get Book: LibroA From: My own client
+2021/12/10 01:58:05 Get Author:  From: My own client
+2021/12/10 01:58:20 Get Book:  From: My own client
+2021/12/10 01:58:41 Get Book:  From: My own client
+2021/12/10 02:01:05 Get Book:  From: My own client
+2021/12/10 02:01:21 Get Author:  From: My own client
+2021/12/10 02:05:24 Get Book: Libro1 From: My own client
+2021/12/10 02:08:52 Get Book: LibroA From: My own client
+2021/12/10 02:09:38 Get Author:  From: My own client
+2021/12/10 02:10:42 Get Author:  From: My own client
+2021/12/10 02:12:58 Get Author:  From: My own client
+2021/12/10 02:15:19 Get Author: AutorA From: My own client

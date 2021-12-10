@@ -5,7 +5,12 @@
 package server;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.rmi.RemoteException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +32,7 @@ import shared.Book;
 public class monitor {
     
     List<Book> bookList = new ArrayList<Book>();
+    Constants constants = new Constants();
     
     public void readLibraryXML() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -50,10 +56,41 @@ public class monitor {
             Logger.getLogger(monitor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    public synchronized void registryLog(String message, String origin){
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(constants.LOG_FILE_PATH, true));
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            writer.append(dtf.format(LocalDateTime.now())+" "+message +" "+ "From: " + origin+"\n");
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         monitor XMLBookReader = new monitor();
         XMLBookReader.readLibraryXML();
+    }
+    
+    public synchronized Book findBook(Book b) throws RemoteException {
+        List<Book> libraryBooks = this.getBookList();
+        Book response = new Book("");
+        for (int i = 0; i < libraryBooks.size(); i++) {
+            if (libraryBooks.get(i).getTitle().equals(b.getTitle())) {
+                response = libraryBooks.get(i);
+            }
+        }
+        return response;
+    }
+    
+    public synchronized ArrayList<Book> findBookByAuthor(Book b) throws RemoteException {
+        List<Book> libraryBooks = this.getBookList();
+        ArrayList<Book> booksList = new ArrayList<Book>();
+        for (int i = 0; i < libraryBooks.size(); i++) {
+            if (libraryBooks.get(i).getAuthor().equals(b.getAuthor())) {
+                booksList.add(libraryBooks.get(i));
+            }
+        }
+        return booksList;
     }
     
     private static Book getBook(Node node) {

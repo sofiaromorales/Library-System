@@ -31,14 +31,8 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
     
     @Override
     public Book findBook(Book b) throws RemoteException {
-        List<Book> libraryBooks = XMLBookReader.getBookList();
-        Book response = new Book("");
-        for (int i = 0; i < libraryBooks.size(); i++) {
-            if (libraryBooks.get(i).getTitle().equals(b.getTitle())) {
-                response = libraryBooks.get(i);
-            }
-        }
-        this.registryLog("Get Book: "+ b.getTitle(), "My own client");
+        Book response = XMLBookReader.findBook(b);
+        XMLBookReader.registryLog("Get Book: "+ b.getTitle(), "My own client");
         return response;
     }
     
@@ -46,32 +40,14 @@ public class LibraryServer extends UnicastRemoteObject implements LibraryRMIInte
         super();
     }
     
-    public void registryLog(String message, String origin){
-        try {
-            PrintWriter writer = new PrintWriter(new FileWriter(constants.LOG_FILE_PATH, true));
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            writer.append(dtf.format(LocalDateTime.now())+" "+message +" "+ "From: " + origin+"\n");
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
     @Override
     public ArrayList<Book> findBookByAuthor(Book b) throws RemoteException {
-        List<Book> libraryBooks = XMLBookReader.getBookList();
-        ArrayList<Book> booksList = new ArrayList<Book>();
-        System.out.println(libraryBooks.toString());
-        for (int i = 0; i < libraryBooks.size(); i++) {
-            if (libraryBooks.get(i).getAuthor().equals(b.getAuthor())) {
-                booksList.add(libraryBooks.get(i));
-            }
-        }
-        this.registryLog("Get Author: "+ b.getAuthor(), "My own client");
+        ArrayList<Book> booksList= XMLBookReader.findBookByAuthor(b);
+        XMLBookReader.registryLog("Get Author: "+ b.getAuthor(), "My own client");
         return booksList;
-        
-        
     }
+    
     public static void main(String[] args) throws IOException {
         Constants constants = new Constants();
         try {

@@ -50,12 +50,20 @@ public class LibraryClient {
                 );
                 JTextField xField = new JTextField(5);
                 JTextField yField = new JTextField(5);
+                JTextField x2Field = new JTextField(5);
+                JTextField y2Field = new JTextField(5);
                 JPanel myPanel = new JPanel();
                 myPanel.add(new JLabel("Book name:"));
                 myPanel.add(xField);
                 myPanel.add(Box.createHorizontalStrut(15));
                 myPanel.add(new JLabel("Library:"));
                 myPanel.add(yField);
+                JPanel myPanel2 = new JPanel();
+                myPanel2.add(new JLabel("Author name:"));
+                myPanel2.add(x2Field);
+                myPanel2.add(Box.createHorizontalStrut(15));
+                myPanel2.add(new JLabel("Library:"));
+                myPanel2.add(y2Field);
                 switch (choice) {
                     case 0: {
                         int result = JOptionPane.showConfirmDialog(
@@ -77,10 +85,10 @@ public class LibraryClient {
                                 Socket s = new Socket(constants.SOCKET_REMOTE_LIBRARY_IP, constants.SOCKET_REMOTE_LIBRARY_PORT);  
                                 DataInputStream din = new DataInputStream(s.getInputStream());  
                                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-                                dout.writeUTF(xField.getText() + " " + constants.LIBRARY);  
+                                dout.writeUTF("Get Title: "+xField.getText() + " " + constants.LIBRARY);  
                                 dout.flush(); 
                                 String[] bookInfo = din.readUTF().split(" ");
-                                Book response = new Book(bookInfo[0], bookInfo[1]);
+                                Book response = new Book(bookInfo[1], bookInfo[3]);
                                 JOptionPane.showMessageDialog(null, "Title: " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
                                 dout.close();  
                                 s.close();  
@@ -91,19 +99,44 @@ public class LibraryClient {
                         break;
                     }
                      case 1:{
-                        String author = JOptionPane.showInputDialog("Type the name of the author");
+                        int result = JOptionPane.showConfirmDialog(
+                                null, 
+                                myPanel2, 
+                                "", 
+                                JOptionPane.OK_CANCEL_OPTION
+                        );
+                        //String author = JOptionPane.showInputDialog("Type the name of the author");
                         String aux = "";
-                        try{
-                            ArrayList<Book> response = server.findBookByAuthor(new Book("",author));
-                            for (int i=0;i < response.size();i++){
-                                
-                                aux = aux + "Title : "+ response.get(i).getTitle()+ "\n"+ "Author: "+ response.get(i).getAuthor()+ "\n\n";
-                               
-                            }
+                        if (y2Field.getText().isEmpty()) {
+                            try{
+                                System.out.println("Soy Gabo"+x2Field.getText());
+                                System.out.println("Soy carlos"+y2Field.getText());
+                                ArrayList<Book> response = server.findBookByAuthor(new Book("",x2Field.getText()));
+                                for (int i=0;i < response.size();i++){
+                                    aux = aux + "Title : "+ response.get(i).getTitle()+ "\n"+ "Author: "+ response.get(i).getAuthor()+ "\n\n";
+                                }
                             JOptionPane.showMessageDialog(null,aux);
                         }catch(NoSuchElementException ex){
                             JOptionPane.showMessageDialog(null, "Not found");
+                            }
+                        } else if (y2Field.getText().equals(constants.REMOTE_LIBRARY)) {
+                            try{      
+                                Socket s = new Socket(constants.SOCKET_REMOTE_LIBRARY_IP, constants.SOCKET_REMOTE_LIBRARY_PORT);  
+                                DataInputStream din = new DataInputStream(s.getInputStream());  
+                                DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+                                dout.writeUTF("Get Author: "+x2Field.getText() + " " + constants.LIBRARY);  
+                                dout.flush(); 
+                                String[] bookInfo = din.readUTF().split(" ");
+                                Book response = new Book(bookInfo[1], bookInfo[3]);
+                                JOptionPane.showMessageDialog(null, "Title: " + response.getTitle() + "\n" + "Author: " + response.getAuthor()); 
+                                dout.close();  
+                                s.close();  
+                            } catch(Exception e){ System.out.println(e); }  
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Library doesn't exists"); 
                         }
+                        break;
+                
                     }
                     default: 
                        System.exit(0);
