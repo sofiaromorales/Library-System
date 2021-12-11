@@ -29,18 +29,26 @@ public class SocketConnection {
             DataInputStream dis = new DataInputStream(s.getInputStream());
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             String[] response = dis.readUTF().split(" ");
-            Book returnedBook = new Book();
-            if(response[1]=="Get Title:"){
-                String bookName = response[1] ;
-                System.out.println("Looking for = " + bookName); 
+            System.out.println("response");
+            System.out.println(response);
+            System.out.println("response[1]");
+            System.out.println(response[1]);
+            System.out.println("response[2]");
+            System.out.println(response[2]);
+            Book returnedBook = new Book("");
+            System.out.println("Title:".equals(response[1]));
+            if("Title:".equals(response[1])){
+                String bookName = response[2] ;
+                System.out.println("bookName > " + bookName); 
                 Book book = new Book(bookName);
-                XMLBookReader.registryLog("Get Book: "+ bookName, response[2]);
+                System.out.println("XMLBookReader.registryLog"); 
+                XMLBookReader.registryLog("Get Book: " + bookName, response[3]);
                 returnedBook = XMLBookReader.findBook(book);
             }else{
-                String authorName = response[1] ;
+                String authorName = response[2] ;
                 System.out.println("Looking for = " + authorName); 
                 Book book = new Book("",authorName);
-                XMLBookReader.registryLog("Get Book: "+ authorName, response[2]);
+                XMLBookReader.registryLog("Get Author: "+ authorName, response[3]);
                 ArrayList<Book> booksList = XMLBookReader.findBookByAuthor(book);
                 returnedBook = booksList.get(0);
             }

@@ -1,1 +1,5 @@
-Get Author: AutorAFromMy own client
+Get Author: AutorAFromMy own client2021/12/10 10:29:46 Get Book: LibroA From: My own client
+2021/12/10 21:17:54 Get Book: LibroA From: My own client
+2021/12/10 21:20:19 Get Book: LibroA From: My own client
+2021/12/10 22:46:23 Get Book: LibroA From: A
+2021/12/10 22:47:53 Get Author: AutorA From: A

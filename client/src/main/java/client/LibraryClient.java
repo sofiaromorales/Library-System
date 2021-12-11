@@ -38,7 +38,7 @@ public class LibraryClient {
         Constants constants = new Constants();
         try {
             Registry reg = LocateRegistry.getRegistry(constants.SERVER_IP, constants.SERVER_PORT);
-            LibraryRMIInterface server = (LibraryRMIInterface) reg.lookup("rmi://localhost/service");
+            LibraryRMIInterface server = (LibraryRMIInterface) reg.lookup("rmi://" + constants.SERVER_IP + "/service");
             
             boolean findMore;
             do {
